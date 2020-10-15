@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
+import Context from './../context';
 
 const styles = {
     li: {
@@ -16,16 +17,21 @@ const styles = {
     }
 };
 function BookItem ({book, index, onChange}){
-    console.log(book, "book")
+    const classes = [];
+    const { removeBook } = useContext(Context);
+    if (book.isDeleted) {
+        classes.push('done');
+    }
+    console.log(book, "book");
     return (
         <li style={styles.li}>
-            <span>
-                <input style={styles.input} type="checkbox" onChange={() => onChange(book.id)}/>
+            <span className={classes.join(' ')}>
+                <input style={styles.input} type="checkbox" checked={book.isDeleted} onChange={() => onChange(book.id)}/>
                 <strong>{index + 1}</strong>
                 &nbsp;
                 {book.title}
             </span>
-            <button className={'rm'}>&times;</button>
+            <button className={'rm'} onClick={ removeBook.bind(null, book.id) }>&times;</button>
         </li>
     )
 }
